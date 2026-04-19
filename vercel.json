@@ -1,0 +1,1 @@
+{"version":2,"name":"autosac-usta","builds":[{"src":"index.html","use":"@vercel/static"}],"routes":[{"src":"/(.*)","dest":"/$1"}]}

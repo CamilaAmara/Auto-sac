@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema Académico SAC – Universidad Santo Tomás</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     PANTALLA DE LOGIN
+════════════════════════════════════════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-bg">
+    <img src="assets/images/fondo-sac-inicio-sesion.png" alt="" class="login-bg-img" onerror="this.style.display='none'"/>
+    <div class="login-bg-fallback"></div>
+  </div>
+
+  <div class="login-header">
+    <div class="login-header-left">
+      <div class="login-sac-icon">
+        <img src="assets/images/sac-icon.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+        <svg style="display:none;width:22px;height:22px" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="#1a4fa8" stroke="#3a6ecc" stroke-width="1.5"/>
+          <path d="M8 12l2.5 2.5L16 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="login-sac-title">Sistema académico</span>
+    </div>
+    <div class="login-header-right">
+      <span class="login-idioma-label">Idioma :</span>
+      <select class="login-idioma-sel"><option>Español</option></select>
+      <button class="login-salir-btn">⏻ Salir</button>
+    </div>
+  </div>
+
+  <div class="login-body">
+    <div class="login-welcome-text">
+      
+      <div id="ustaLogoFallback" class="login-usta-logo-fallback" style="display:none">
+        UNIVERSIDAD<br><strong>SANTO TOMÁS</strong>
+      </div>
+      <div class="login-big-text">
+        <div class="lbt-line1">BIENVENIDOS AL</div>
+        <div class="lbt-line2">SISTEMA <strong>ACADÉMICO</strong></div>
+        <div class="lbt-line3">SAC</div>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <div class="login-panel-title">Acceso al sistema</div>
+      <div class="login-user-icon">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#c8e000" stroke-width="4"/>
+          <circle cx="40" cy="28" r="13" fill="none" stroke="#c8e000" stroke-width="4"/>
+          <path d="M12 68 Q14 48 40 48 Q66 48 68 68" fill="none" stroke="#c8e000" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="login-field-row">
+        <label class="login-label">Usuario :</label>
+        <input type="text" id="loginUser" class="login-input" value="1097493972" autocomplete="off"/>
+      </div>
+      <div class="login-field-row">
+        <label class="login-label">Clave :</label>
+        <input type="password" id="loginPass" class="login-input" value="1097493972" autocomplete="off"/>
+      </div>
+      <div class="login-check-row">
+        <input type="checkbox" id="noCerrar"/>
+        <label for="noCerrar">No cerrar sesión</label>
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button class="login-enter-btn" id="loginBtn" onclick="doLogin()">Entrar ▶</button>
+
+      <!-- BOTÓN ADMIN -->
+      <div class="admin-link-wrap">
+        <button class="admin-link-btn" onclick="goAdmin()">⚙️ Administrador del Auto-SAC</button>
+      </div>
+
+      <div class="login-links">
+        <a href="#" class="login-link">🔒 Cambiar clave</a>
+        <a href="#" class="login-link">🔑 ¿Olvidó su clave?</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-footer">
+    <span>© 2026 Acies</span><span class="lfsep">|</span>
+    <span>Sistema académico</span><span class="lfsep">|</span>
+    <span>[v5.0.0]</span>
+    <span class="login-footer-end">Conectado a [SAC]</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANTALLA PRINCIPAL SAC
+════════════════════════════════════════════════════ -->
+<div id="sacScreen" class="sac-screen hidden">
+
+  <header class="sac-header">
+    <div class="header-left">
+      <div class="sac-logo-icon">
+        <img src="assets/images/sac-icon.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+        <svg style="display:none;width:22px;height:22px" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="#1a4fa8"/>
+          <path d="M8 12l2.5 2.5L16 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="sac-title">Sistema académico</span>
+    </div>
+    <div class="header-center">
+      <div class="hfield"><span class="hlabel">Empresa :</span>
+        <select class="hselect"><option>UNIVERSIDAD SANTO TOMAS</option></select></div>
+      <div class="hfield"><span class="hlabel">Perfil :</span>
+        <select class="hselect"><option>Alumno</option></select></div>
+      <div class="hfield"><span class="hlabel">Idioma :</span>
+        <select class="hselect"><option>Español</option></select></div>
+    </div>
+    <div class="header-right">
+      <button class="hdr-send-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+      <button class="hdr-salir-btn" onclick="doLogout()">⏻ Salir</button>
+    </div>
+  </header>
+
+  <div class="sac-body">
+    <aside class="sac-sidebar">
+      <div class="sidebar-profile">
+        <div class="profile-avatar">
+          <img src="assets/images/user-avatar.png" alt=""
+               onerror="this.style.display='none'; document.getElementById('avatarSvg').style.display='block'"/>
+          <svg id="avatarSvg" style="display:none;width:68px;height:68px" viewBox="0 0 80 90">
+            <rect width="80" height="90" fill="#1a1a2a"/>
+            <circle cx="40" cy="25" r="15" fill="#555"/>
+            <ellipse cx="40" cy="65" rx="22" ry="20" fill="#444"/>
+            <rect x="33" y="36" width="14" height="20" fill="#333"/>
+          </svg>
+        </div>
+        <div class="profile-name">MARÍA CAMILA AMARA HERNÁNDEZ</div>
+        <div class="profile-code">1097493972</div>
+      </div>
+
+      <div class="sidebar-search-wrap">
+        <span class="search-check">☑</span>
+        <div class="search-box-row">
+          <input type="text" class="search-input"/>
+          <button class="search-go"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#555" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="sidebar-tabs-row">
+        <div class="sidebar-tab-active">● Inicio</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-group-title">Proceso Financiero</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Solicitud de Descuentos</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Aplicación de saldos</div>
+        <div class="nav-group-title">Proceso Novedades Académicas</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Solicitud de reintegros para estud...</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Solicitud de cursos de nivelación</div>
+        <div class="sidebar-search-wrap" style="margin:5px 0"><div class="search-box-row" style="width:100%"><input type="text" class="search-input"/><button class="search-go"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#555" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="18" y2="18"/></svg></button></div></div>
+        <div class="nav-group-title">Proceso de Administración</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Actualización de datos personales</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Hoja de vida</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Actualización de datos de egresa...</div>
+        <div class="nav-group-title">Proceso Admisiones</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Registro de documentos</div>
+        <div class="sidebar-search-wrap" style="margin:5px 0"><div class="search-box-row" style="width:100%"><input type="text" class="search-input"/><button class="search-go"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#555" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="18" y2="18"/></svg></button></div></div>
+        <div class="nav-group-title">Proceso Matrícula Académica</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Consulta de requisitos de matrícul...</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Simulador de matrícula</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Recibo de pago de matrícula y otr...</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Matrícula Individual</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Consulta del horario de la oferta</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Consulta de estudiantes</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Semáforo del estudiante</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Historico de notas</div>
+        <div class="nav-item nav-item-fav"><span class="nav-bullet">≡</span> Horario del estudiante</div>
+        <div class="sidebar-search-wrap" style="margin:5px 0"><div class="search-box-row" style="width:100%"><input type="text" class="search-input"/><button class="search-go"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#555" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="18" y2="18"/></svg></button></div></div>
+        <div class="nav-item nav-checkbox-item"><span class="nav-check-icon">☑</span> Plan de estudios individual</div>
+        <div class="nav-group-title">Proceso Notas</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Notas registradas (Subnotas)</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Consulta de asistencia y comenta...</div>
+        <div class="nav-group-title">Proceso Novedades de Notas</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Solicitud de novedades de notas</div>
+        <div class="nav-group-title">Proceso Certificados</div>
+        <div class="nav-item nav-item-highlight"><span class="nav-bullet">≡</span> Solicitud de certificados para estu...</div>
+        <div class="nav-group-title">Proceso Grados</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Solicitud de grados</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Cargue de requisitos de grado</div>
+        <div class="nav-item"><span class="nav-bullet">≡</span> Programas extracurriculares por e...</div>
+        <div class="sidebar-search-wrap" style="margin:5px 0"><div class="search-box-row" style="width:100%"><input type="text" class="search-input"/><button class="search-go"><svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="#555" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="18" y2="18"/></svg></button></div></div>
+        <div class="nav-group-title">Favoritos</div>
+        <div class="nav-item nav-item-fav"><span class="nav-bullet">≡</span> Horario del estudiante</div>
+      </nav>
+    </aside>
+
+    <main class="sac-content">
+      <div id="view-inicio" class="sac-view">
+        <div class="inicio-center">
+          <img src="assets/images/logo-usta-main.png" alt="Universidad Santo Tomás"
+               class="usta-main-logo"
+               onerror="this.style.display='none'; document.getElementById('ustaFallback').style.display='flex'"/>
+          <div id="ustaFallback" class="usta-fallback" style="display:none">
+            <div class="usta-shield"><div class="shield-outer"><div class="shield-inner"><div class="shield-ch"></div><div class="shield-cv"></div></div></div></div>
+            <div class="usta-words">
+              <div class="uw-name">UNIVERSIDAD SANTO TOMÁS</div>
+              <div class="uw-sub">PRIMER CLAUSTRO UNIVERSITARIO DE COLOMBIA</div>
+              <div class="uw-sys">SISTEMA ACADÉMICO SAC</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="sac-footer">
+    <span>© 2026 Acies</span><span class="fsep">|</span>
+    <span>Sistema académico</span><span class="fsep">|</span>
+    <span>[v5.0.0]</span><span class="fsep">|</span>
+    <span>Usuario: 1097493972</span><span class="fsep">|</span>
+    <span>Conectado desde: 190.13.15.184</span><span class="fsep">|</span>
+    <span>Inactividad: 0min 0seg / 15min 0seg</span>
+    <span class="footer-end">Conectado a [SAC]</span>
+  </footer>
+
+  <!-- AUTO-SAC CHATBOT -->
+  <div class="bot-root" id="botRoot">
+    <div class="bot-window" id="botWindow">
+      <div class="bot-header">
+        <div class="bot-header-left">
+          <div class="bot-avatar-wrap">
+            <img src="assets/images/autosac-avatar.png" alt="Auto-SAC"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+            <div class="bot-avatar-emoji">🎓</div>
+          </div>
+          <div>
+            <div class="bot-name" id="botNameHeader">Auto-SAC</div>
+            <div class="bot-status"><span class="status-led"></span>En línea</div>
+          </div>
+        </div>
+        <button class="bot-close" onclick="toggleBot()">✕</button>
+      </div>
+      <div class="bot-messages" id="botMessages"></div>
+      <div class="bot-quick" id="botQuick">
+        <button onclick="quickMsg('¿Hay cupos en mis materias de Teleco?')">📋 Cupos</button>
+        <button onclick="quickMsg('¿Cómo aplico a movilidad o intercambio internacional?')">🌍 Movilidad</button>
+        <button onclick="quickMsg('Quiero matricularme este semestre')">📝 Matrícula</button>
+        <button onclick="quickMsg('Necesito un certificado de estudiante')">📄 Certificado</button>
+        <button onclick="quickMsg('¿Cómo pago mi matrícula?')">💳 Pagos</button>
+        <button onclick="quickMsg('Tengo una excusa médica que entregar')">🏥 Excusa médica</button>
+        <button onclick="quickMsg('Necesito información sobre una salida académica o permiso')">🏫 Salidas académicas</button>
+      </div>
+      <div class="bot-input-row">
+        <input type="text" id="botInput" placeholder="Escríbeme lo que necesitas..."
+               onkeydown="handleBotKey(event)" autocomplete="off"/>
+        <button class="bot-send" onclick="sendBotMsg()" id="botSendBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button class="bot-fab" id="botFab" onclick="toggleBot()">
+      <img src="assets/images/autosac-avatar.png" alt="Auto-SAC"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+      <div class="fab-emoji">🎓</div>
+      <span class="fab-badge" id="fabBadge"></span>
+    </button>
+  </div>
+
+</div><!-- fin sacScreen -->
+
+<div class="toast-msg" id="toastMsg"></div>
+
+<script src="js/config.js"></script>
+<script src="js/login.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>

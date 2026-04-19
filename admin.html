@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administrador Auto-SAC – USTA Teleco</title>
+  <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     LOGIN ADMIN
+════════════════════════════════════════════════════ -->
+<div id="adminLoginScreen" class="adm-login-screen">
+  <div class="adm-login-bg"></div>
+  <div class="adm-login-box">
+
+    <div class="adm-login-logo">
+      <img src="assets/images/logo-usta-main.png" alt="USTA"
+           onerror="this.style.display='none'; document.getElementById('adminLogoFb').style.display='block'"/>
+      <div id="adminLogoFb" class="adm-logo-fb" style="display:none">
+        <div class="adm-logo-circle">USTA</div>
+        <div>
+          <div class="adm-logo-name">UNIVERSIDAD SANTO TOMÁS</div>
+          <div class="adm-logo-sub">Sede Bucaramanga</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="adm-login-title">
+      <span class="adm-icon">⚙️</span>
+      <div>
+        <div class="adm-title-main">Administrador Auto-SAC</div>
+        <div class="adm-title-sub">Panel de Configuración – Teleco USTA</div>
+      </div>
+    </div>
+
+    <div class="adm-field">
+      <label>Usuario</label>
+      <input type="text" id="adminUser" placeholder="Usuario administrador" value="1097493972"/>
+    </div>
+    <div class="adm-field">
+      <label>Contraseña</label>
+      <input type="password" id="adminPass" placeholder="Contraseña" value="1097493972"/>
+    </div>
+    <div class="adm-login-error" id="adminLoginError"></div>
+    <button class="adm-login-btn" onclick="doAdminLogin()">Ingresar al panel ▶</button>
+    <a href="index.html" class="adm-back-link">← Volver al SAC estudiantil</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL ADMIN
+════════════════════════════════════════════════════ -->
+<div id="adminPanel" class="adm-panel hidden">
+
+  <!-- Topbar -->
+  <header class="adm-topbar">
+    <div class="adm-topbar-left">
+      <img src="assets/images/sac-icon.png" alt="" class="adm-topbar-icon"
+           onerror="this.style.display='none'"/>
+      <div>
+        <div class="adm-topbar-title">⚙️ Panel Administrador – Auto-SAC</div>
+        <div class="adm-topbar-sub">Universidad Santo Tomás · Teleco Bucaramanga</div>
+      </div>
+    </div>
+    <div class="adm-topbar-right">
+      <div class="adm-save-indicator" id="saveIndicator"></div>
+      <button class="adm-save-btn" onclick="saveAll()">💾 Guardar todo</button>
+      <a href="index.html" class="adm-exit-btn">🚪 Salir</a>
+    </div>
+  </header>
+
+  <!-- Layout -->
+  <div class="adm-layout">
+
+    <!-- Sidebar nav -->
+    <nav class="adm-sidebar">
+      <div class="adm-nav-item active" onclick="showSection('matricula', this)">
+        <span>📅</span> Temporada de Matrícula
+      </div>
+      <div class="adm-nav-item" onclick="showSection('cupos', this)">
+        <span>📋</span> Disponibilidad de Cupos
+      </div>
+      <div class="adm-nav-item" onclick="showSection('correos', this)">
+        <span>📬</span> Gestión de Correos
+      </div>
+      <div class="adm-nav-item" onclick="showSection('profesores', this)">
+        <span>👨‍🏫</span> Profesores Teleco
+      </div>
+      <div class="adm-nav-item" onclick="showSection('chatbot', this)">
+        <span>🤖</span> Config. del Bot
+      </div>
+
+      <div class="adm-nav-divider"></div>
+      <div class="adm-nav-status">
+        <div class="adm-status-label">Estado matrícula:</div>
+        <div class="adm-status-badge" id="sidebarMatriculaStatus">–</div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="adm-content">
+
+      <!-- ══ SECCIÓN: MATRÍCULA ══ -->
+      <section id="sec-matricula" class="adm-section">
+        <div class="adm-section-header">
+          <div class="adm-section-icon">📅</div>
+          <div>
+            <h2>Temporada de Matrícula</h2>
+            <p>Controla si los estudiantes pueden iniciar el proceso de matrícula.</p>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-toggle-row">
+            <div>
+              <div class="adm-toggle-label">¿Temporada de matrícula activa?</div>
+              <div class="adm-toggle-desc">Cuando está activo, el chatbot guiará al estudiante en el proceso. Cuando está inactivo, recibirá el mensaje de espera.</div>
+            </div>
+            <label class="adm-toggle">
+              <input type="checkbox" id="matriculaToggle" onchange="updateMatriculaStatus()"/>
+              <span class="adm-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">📝 Mensaje cuando NO hay temporada de matrícula</div>
+          <div class="adm-card-desc">Este texto le aparecerá al estudiante si pregunta por matrículas fuera de temporada.</div>
+          <textarea id="mensajeNoMatricula" class="adm-textarea" rows="4"
+            placeholder="Ej: Aún no estamos en temporada de matrículas. Próxima apertura: semana del 15 de julio."></textarea>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">📆 Semestre actual</div>
+          <input type="text" id="semestreActual" class="adm-input" placeholder="Ej: 2025-1"/>
+        </div>
+
+        <button class="adm-btn-primary" onclick="saveSection('matricula')">💾 Guardar cambios de matrícula</button>
+      </section>
+
+      <!-- ══ SECCIÓN: CUPOS ══ -->
+      <section id="sec-cupos" class="adm-section hidden">
+        <div class="adm-section-header">
+          <div class="adm-section-icon">📋</div>
+          <div>
+            <h2>Disponibilidad de Cupos</h2>
+            <p>Indica qué materias tienen cupo disponible. El chatbot informará esto a los estudiantes.</p>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-filter-row">
+            <span class="adm-filter-label">Filtrar por tipo:</span>
+            <button class="adm-filter-btn active" onclick="filterCupos('ALL', this)">Todas</button>
+            <button class="adm-filter-btn" onclick="filterCupos('TC', this)">TC – Teleco</button>
+            <button class="adm-filter-btn" onclick="filterCupos('CB', this)">CB – Ciencias</button>
+            <button class="adm-filter-btn" onclick="filterCupos('HUM', this)">HUM – Humanidades</button>
+            <button class="adm-filter-btn" onclick="filterCupos('ID', this)">ID – Idiomas</button>
+          </div>
+          <div id="cuposContainer" class="adm-cupos-grid"></div>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">➕ Agregar materia personalizada</div>
+          <div class="adm-add-row">
+            <input type="text" id="newMateria" class="adm-input" placeholder="Nombre de la materia" style="flex:2"/>
+            <select id="newTipo" class="adm-select">
+              <option value="TC">TC – Teleco</option>
+              <option value="CB">CB – Ciencias Básicas</option>
+              <option value="HUM">HUM – Humanidades</option>
+              <option value="ID">ID – Idiomas</option>
+            </select>
+            <button class="adm-btn-primary" onclick="addMateria()">Agregar</button>
+          </div>
+        </div>
+
+        <button class="adm-btn-primary" onclick="saveSection('cupos')">💾 Guardar disponibilidad de cupos</button>
+      </section>
+
+      <!-- ══ SECCIÓN: CORREOS ══ -->
+      <section id="sec-correos" class="adm-section hidden">
+        <div class="adm-section-header">
+          <div class="adm-section-icon">📬</div>
+          <div>
+            <h2>Gestión de Correos y Personal</h2>
+            <p>Define qué correo se usa para cada área y quién es el responsable. El chatbot usará esta información.</p>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div id="correosContainer"></div>
+          <button class="adm-btn-secondary" onclick="addCorreo()" style="margin-top:12px">➕ Agregar área</button>
+        </div>
+
+        <button class="adm-btn-primary" onclick="saveSection('correos')">💾 Guardar directorio de correos</button>
+      </section>
+
+      <!-- ══ SECCIÓN: PROFESORES ══ -->
+      <section id="sec-profesores" class="adm-section hidden">
+        <div class="adm-section-header">
+          <div class="adm-section-icon">👨‍🏫</div>
+          <div>
+            <h2>Profesores de Telecomunicaciones</h2>
+            <p>Gestiona la lista de docentes y sus correos. El chatbot podrá dirigir peticiones a cada uno.</p>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div id="profesoresContainer"></div>
+          <button class="adm-btn-secondary" onclick="addProfesor()" style="margin-top:12px">➕ Agregar profesor</button>
+        </div>
+
+        <button class="adm-btn-primary" onclick="saveSection('profesores')">💾 Guardar profesores</button>
+      </section>
+
+      <!-- ══ SECCIÓN: CONFIG BOT ══ -->
+      <section id="sec-chatbot" class="adm-section hidden">
+        <div class="adm-section-header">
+          <div class="adm-section-icon">🤖</div>
+          <div>
+            <h2>Configuración del Bot</h2>
+            <p>Personaliza el comportamiento del asistente virtual sin tocar código.</p>
+          </div>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">🏷️ Nombre del asistente</div>
+          <input type="text" id="nombreBot" class="adm-input" placeholder="Ej: Auto-SAC"/>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-title">🔑 API Key de Groq (IA del chatbot)</div>
+          <div class="adm-card-desc">Pega aquí tu API key de Groq. Se guarda localmente y el chatbot la usará en tiempo real sin tocar el código. Obtenla en: <a href="https://console.groq.com/keys" target="_blank" style="color:#1b50b8">console.groq.com/keys</a></div>
+          <input type="password" id="groqApiKey" class="adm-input" placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxx"/>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-title">💬 Mensaje de bienvenida</div>
+          <div class="adm-card-desc">Lo primero que dice el bot al abrirse.</div>
+          <textarea id="mensajeBienvenida" class="adm-textarea" rows="4"
+            placeholder="Ej: ¡Hola! Soy Auto-SAC, tu asistente virtual de Teleco..."></textarea>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">📢 Anuncio especial (opcional)</div>
+          <div class="adm-card-desc">Si hay un aviso importante, el bot lo mencionará en sus respuestas (ej: "Recuerda que mañana hay jornada de matrículas").</div>
+          <textarea id="mensajeExtra" class="adm-textarea" rows="3"
+            placeholder="Dejar vacío si no hay anuncio..."></textarea>
+        </div>
+
+        <div class="adm-card">
+          <div class="adm-card-title">📊 Resumen del estado actual del bot</div>
+          <div id="botStatusSummary" class="adm-status-summary"></div>
+        </div>
+
+        <button class="adm-btn-primary" onclick="saveSection('chatbot')">💾 Guardar configuración del bot</button>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="adm-toast" id="admToast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
